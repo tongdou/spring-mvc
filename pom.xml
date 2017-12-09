@@ -25,6 +25,7 @@
         <module>agent</module>
         <module>job</module>
         <module>mvc</module>
+        <module>profile</module>
     </modules>
 
 

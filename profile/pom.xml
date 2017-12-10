@@ -33,7 +33,71 @@
             <version>3.2.18.RELEASE</version>
         </dependency>
 
+
     </dependencies>
+
+
+    <!--
+    1、如果使用参数，则env使用activeByDefault=true的值test，则导出test目录
+    clean install -Dmaven.test.skip=true
+    2、如果使用-P指定环境dev，则导出dev目录
+    clean install -Pdev -Dmaven.test.skip=true
+    -->
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <env>dev</env>
+            </properties>
+        </profile>
+        <profile>
+            <id>test</id>
+            <properties>
+                <env>test</env>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>product</id>
+            <properties>
+                <env>product</env>
+            </properties>
+        </profile>
+
+    </profiles>
+
+
+    <build>
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+                <!-- **/*.properties 是指包括根目录或子目录所有properties类型的文件 -->
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                </includes>
+
+                <!-- 排除dev、test目录下的文件 -->
+                <excludes>
+                    <exclude>dev/*</exclude>
+                    <exclude>test/*</exclude>
+                    <exclude>product/*</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+                <!-- 包含，若没有指定则默认为 activeByDefault 标签定义的profile -->
+                <includes>
+                    <include>${env}/*</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
 
 
 </project>
